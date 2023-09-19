@@ -1,0 +1,46 @@
+.mandarin {
+  font-size: 12rem;
+}
+
+.check {
+  height: 100%; 
+  font-size: 6rem;
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* Centered Title */
+h2 {
+  padding-top: 1rem;
+  text-align: center;
+}
+
+.centered {
+  text-align: center;
+}
+
+.correct {
+  /* padding-left: 1rem; */
+}
+
+.small-bottom {
+    margin-bottom: 0.4rem;
+}
+
+input.character {
+  vertical-align: middle;
+  text-align: center;
+  border: 0;
+}
+
+input.foo {
+    height: 3.6rem
+}
+ 
+.borderless {
+  border: 0;
+}
+
+.blue {
+    background-color: lightblue;
+}

@@ -1,0 +1,84 @@
+<form id="challenge-form" hx-target="#challenge" hx-trigger="haveAnswer from:body" hx-post="/search">
+
+  <p class="centered">Give the numeric pinyin and meaning for 10 Chinese characters!</p>
+
+  <!-- This is the remaining challenge characters in random order -->
+  <input type="hidden" name="characters" value="{{ characters }}">
+
+  <!-- ✅❌ -->
+
+  <div class="row">
+    <div class="one column">&nbsp;</div>
+    <div class="three columns">
+      <label class="centered" for="character">Question</label>
+    </div>
+    <div class="four columns centered">{{ '(simplified)' if not traditional else '&nbsp;'|safe }}</div>
+    <div class="three columns">
+      <label class="centered" for="answer_char">Answer</label>
+      <!-- <p class="mandarin">{{ guess }}</p> -->
+    </div>
+    <div class="one column">&nbsp;</div>
+  </div>
+
+
+  <div class="row">
+    <div class="one column">&nbsp;</div>
+    <div class="three columns">
+      <input class="mandarin u-full-width character small-bottom" type="input" id="character" name="character" readonly value="{{ character }}">
+    </div>
+    <div class="four columns check">{{ '✅' if character == answer_char else '❌' if answer_char else '&nbsp;'|safe }}</div>
+    <div class="three columns">
+      <input class="mandarin u-full-width character small-bottom" type="input" name="answer_char" id="answer_char" readonly value="{{ answer_char }}">
+      <!-- <p class="mandarin">{{ guess }}</p> -->
+    </div>
+    <div class="one column">&nbsp;</div>
+  </div>
+
+  <div class="row">
+    <div class="one column">&nbsp;</div>
+    <div class="three columns">
+      <p class="centered">{{ question_pinyin or "&nbsp;"|safe }}</p>
+    </div>
+    <div class="four columns">&nbsp;</div>
+    <div class="three columns">
+      <p class="centered">{{ answer_pinyin or "&nbsp;"|safe }}</p>
+    </div>
+    <div class="one columns">&nbsp;</div>
+  </div>
+
+  <div class="row">
+     <div class="nine columns">
+       <!-- <label for="pinyin">Search</label> -->
+       <input class="u-full-width form-control"
+           type="search" 
+           autocomplete="off"
+           list="matching_pinyins"
+           name="pinyin_prefix"
+           id="pinyin" 
+           placeholder="Type pinyin ..." 
+           class="u-full-width"
+           value="{{ pinyin_prefix }}"
+           onkeydown="return (event.keyCode!=13);"
+           hx-post="/matching_pinyins" 
+           hx-trigger="keyup changed delay:25ms"
+           hx-target="#matching_pinyins">
+     </div>
+     <datalist id="matching_pinyins">
+      {% include 'pinyins.html' %}
+     </datalist>
+     {% if not answer_char %}
+     <input class="three columns {{ 'button-primary' if have_answer else 'button' }}" type="submit" name="check" value="check" hx-target="#challenge" hx-post="/submit">
+     {% else %}
+     <input class="three columns button-primary" type="submit" name="next" value="next" hx-target="#challenge" hx-post="/nextchar">
+     {% endif %}
+  </div>
+
+  <strong class="correct">{{ correct_meaning }}</strong>
+
+
+  <input type="hidden" name="ncorrect" value="{{ ncorrect or 0 }}">
+  <input type="hidden" name="ntotal" value="{{ ntotal or 0 }}">
+
+  <p class="centered">You got {{ ncorrect }} correct out of {{ ntotal }}{{ ' (so far)' if ntotal < 10 else '' }}</p>
+
+</form>
